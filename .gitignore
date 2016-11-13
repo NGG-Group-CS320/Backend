@@ -1,3 +1,6 @@
+# Directory holding CSV files
+Users/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
