@@ -1,7 +1,8 @@
 # To do
 
 ## Miscellaneous
-- [ ] Add description to README
+- [ ] Flesh out README
+ - https://gist.github.com/PurpleBooth/109311bb0361f32d87a2
 - [ ] Check that we agree that the MIT license is acceptable
 - [ ] Figure out how we will deploy to the AWS server
 
