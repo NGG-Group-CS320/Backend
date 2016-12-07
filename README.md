@@ -7,6 +7,9 @@ Open TODO.md for a list of tasks
 Run the following commands to install the necessary dependencies.
 
 ```
-#install psycopg2 package for python so queries can be made to postgres DB
+# Install psycopg2 python package so queries can be made to postgres DB
 sudo apt-get install python3-psycopg2
+
+# Install the PostgreSQL server locally
+sudo apt-get install postgresql postgresql-contrib
 ```
