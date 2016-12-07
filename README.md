@@ -8,5 +8,5 @@ Run the following commands to install the necessary dependencies.
 
 ```
 #install psycopg2 package for python so queries can be made to postgres DB
-sudo apt-get install python-psycopg2
+sudo apt-get install python3-psycopg2
 ```
