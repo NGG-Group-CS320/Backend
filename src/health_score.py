@@ -11,8 +11,10 @@ read_weights = []
 
 
 def compute_health_score(ihs):
-	row = get_test_health_inputs_row()
+	row = get_test_health_inputs_row() #note: this function will have to be removed at some point
 	systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks = parse_health_inputs_row(row)
+	print("systemid: {}\ntimestamp: {}\nwrites: {}\nreads: {}\ncpu: {}\nbandwidth: {}\ndelayedAcks: {}".format(systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks))
+
 	pass
 
 
@@ -31,3 +33,10 @@ def compute_rs(readScores):
 def compute_ws(writeScores):
 	pass
 
+
+# main function for the purpose of testing
+def main():
+	compute_health_score(0.87)
+
+if __name__ == "__main__":
+	main()
