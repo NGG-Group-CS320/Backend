@@ -1,6 +1,9 @@
 # Directory holding CSV files
 Users/
 
+# The configuration file
+src/config.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
