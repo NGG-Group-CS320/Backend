@@ -10,4 +10,7 @@ Run the following commands to install the necessary dependencies.
 ```
 # Install psycopg2 python package so queries can be made to postgres DB
 sudo apt-get install python3-psycopg2
+
+# Install numpy python package for data manipulation
+sudo apt-get install python3-numpy
 ```
