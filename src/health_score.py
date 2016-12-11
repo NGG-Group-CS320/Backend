@@ -29,19 +29,19 @@ def compute_health_score(ihs):
 
 
 def compute_ihs(ws, res, cps, daPct):
-	return numpy.dot([ws,res, cps, 1-daPct], weights)
+	return np.dot([ws,res, cps, 1-daPct], weights)
 
 
 def compute_cbs(cpuPct, bwPct):
-	return numpy.sqrt(((1-cpuPct)**2+bwPct**2)/2)
+	return np.sqrt(((1-cpuPct)**2+bwPct**2)/2)
 
 
 def compute_rs(readScores):
-	return numpy.dot(readScores, c)
+	return np.dot(readScores, c)
 
 
 def compute_ws(writeScores):
-	return numpy.dot(writeScores, c)
+	return np.dot(writeScores, c)
 
 
 # main function for the purpose of testing
