@@ -22,7 +22,7 @@ read_weights = []
 
 def compute_health_score(ihs):
 	readScore = compute_rs(read_weights)
-	writeScore = compute_ws(read_weights)
+	writeScore = compute_ws(write_weights)
 	cbs = compute_cbs(cpu, bw)
 	ihs = (writeScore, readScore, cbs, daPct)
 	return 800*ihs
