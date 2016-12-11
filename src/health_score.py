@@ -33,7 +33,7 @@ def compute_ihs(ws, res, cps, daPct):
 
 
 def compute_cbs(cpuPct, bwPct):
-	return numpy.sqrt(((1-cpuPct)^2+bwPct^2)/2)
+	return numpy.sqrt(((1-cpuPct)**2+bwPct**2)/2)
 
 
 def compute_rs(readScores):
