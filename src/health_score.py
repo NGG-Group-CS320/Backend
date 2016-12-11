@@ -15,9 +15,10 @@ Compute the interim health score ihs=<ws, rs, cbs, 1-da><0.45, 0.25, 0.2, 0.1> o
 The resulting health score is floor(800*ihs) yielding a value on the range [0, 800].
 """
 weights = [0.45,0.25,0.2,0.1]
-c = [21/21, 20/21, 19/21, 18/21. 17/21, 16/21, 15/21, 14/21, 13/21, 12/21, 11/21, 10/21, 9/21, 8/21, 7/21, 6/21, 5/21, 4/21, 3/21, 2/21, 1/21]
-write_weights = []
-read_weights = []
+c = np.arange(21,0,-1)
+c = c / np.linalg.norm(c)
+write_weights = c
+read_weights = c
 
 
 def compute_health_score(ihs):
