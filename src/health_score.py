@@ -43,12 +43,12 @@ def compute_cbs(cpuPct, bwPct):
 
 def compute_rs(readScores):
 	readScores = np.array(readScores) / 100
-	return np.dot(readScores, write_weights)
+	return np.dot(readScores, read_weights)
 
 
 def compute_ws(writeScores):
 	writeScores = np.array(writeScores) / 100
-	return np.dot(writeScores, read_weights)
+	return np.dot(writeScores, write_weights)
 
 
 # main function for the purpose of testing
