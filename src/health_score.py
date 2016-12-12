@@ -23,10 +23,14 @@ read_weights = c
 
 def compute_health_score(writes, reads, cpu, bandwidth, delayedAcks):
 	readScore = compute_rs(reads)
+	print("Read score: {}".format(readScore))
 	writeScore = compute_ws(writes)
+	print("Write score: {}".format(writeScore))
 	cbs = compute_cbs(cpu, bandwidth)
+	print("CPU-Bandwidth score: {}".format(cbs))
 	ihs = compute_ihs(writeScore, readScore, cbs, delayedAcks)
-	return 800*ihs
+	print("Interim Health score: {}".format(ihs))
+	return int(800*ihs)
 
 
 def compute_ihs(ws, res, cps, daPct):
@@ -51,9 +55,9 @@ def compute_ws(writeScores):
 def main():
 	row = get_test_health_inputs_row() #note: this function will have to be removed at some point
 	systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks = parse_health_inputs_row(row)
-	print("systemid: {}\ntimestamp: {}\nwrites: {}\nreads: {}\ncpu: {}\nbandwidth: {}\ndelayedAcks: {}".format(systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks))
+	# print("systemid: {}\ntimestamp: {}\nwrites: {}\nreads: {}\ncpu: {}\nbandwidth: {}\ndelayedAcks: {}".format(systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks))
 	score = compute_health_score(writes, reads, cpu, bandwidth, delayedAcks)
-	print("this system has a health score of {}/800 (higher is healthier)".format(score))
+	print("This system has a health score of {}/800 (higher is healthier)".format(score))
 
 if __name__ == "__main__":
 	main()
