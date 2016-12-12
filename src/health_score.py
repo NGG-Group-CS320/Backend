@@ -38,10 +38,12 @@ def compute_cbs(cpuPct, bwPct):
 
 
 def compute_rs(readScores):
+	readScores = np.array(readScores) / 100
 	return np.dot(readScores, write_weights)
 
 
 def compute_ws(writeScores):
+	writeScores = np.array(writeScores) / 100
 	return np.dot(writeScores, read_weights)
 
 
@@ -51,7 +53,7 @@ def main():
 	systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks = parse_health_inputs_row(row)
 	print("systemid: {}\ntimestamp: {}\nwrites: {}\nreads: {}\ncpu: {}\nbandwidth: {}\ndelayedAcks: {}".format(systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks))
 	score = compute_health_score(writes, reads, cpu, bandwidth, delayedAcks)
-	print("this system has a health score of {}".format(score))
+	print("this system has a health score of {}/800 (higher is healthier)".format(score))
 
 if __name__ == "__main__":
 	main()
