@@ -11,6 +11,7 @@ def parse_health_inputs_row(row):
 	systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks = row[0], row[1], row[2:2+21], row[2+21:2+21+21], row[-3], row[-2], row[-1]
 	writes = [float(x) for x in writes]
 	reads = [float(x) for x in reads]
+	cpu, bandwidth, delayedAcks = float(cpu), float(bandwidth), float(delayedAcks)
 	return systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks
 
 
