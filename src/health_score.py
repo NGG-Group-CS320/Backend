@@ -14,9 +14,8 @@ Compute cbs=dist((cpu, nbw), (1, 0))/sqrt(2)=sqrt((1-cpu)^2+nbw^2)/2) where cpu 
 Compute the interim health score ihs=<ws, rs, cbs, 1-da><0.45, 0.25, 0.2, 0.1> on the range [0, 1] where da is the delAckPct.
 The resulting health score is floor(800*ihs) yielding a value on the range [0, 800].
 """
-weights = [0.45,0.25,0.2,0.1]
-c = np.arange(21,0,-1)
-c = c / np.linalg.norm(c)
+weights = [0.45, 0.25, 0.2, 0.1]
+c = np.arange(21.0, 0, -1) / 21
 write_weights = c
 read_weights = c
 
@@ -30,15 +29,15 @@ def compute_health_score(writes, reads, cpu, bandwidth, delayedAcks):
 	print("CPU-Bandwidth score: {}".format(cbs))
 	ihs = compute_ihs(writeScore, readScore, cbs, delayedAcks)
 	print("Interim Health score: {}".format(ihs))
-	return int(800*ihs)
+	return int(800 * ihs)
 
 
 def compute_ihs(ws, res, cps, daPct):
-	return np.dot([ws,res, cps, 1-daPct], weights)
+	return np.dot([ws, res, cps, 1 - daPct], weights)
 
 
 def compute_cbs(cpuPct, bwPct):
-	return np.sqrt(((1-cpuPct)**2+bwPct**2)/2)
+	return np.sqrt(((1 - cpuPct) ** 2 + bwPct ** 2) / 2)
 
 
 def compute_rs(readScores):
