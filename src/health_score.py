@@ -21,11 +21,11 @@ write_weights = c
 read_weights = c
 
 
-def compute_health_score(ihs):
-	readScore = compute_rs(read_weights)
-	writeScore = compute_ws(write_weights)
-	cbs = compute_cbs(cpu, bw)
-	ihs = (writeScore, readScore, cbs, daPct)
+def compute_health_score(writes, reads, cpu, bandwidth, delayedAcks):
+	readScore = compute_rs(reads)
+	writeScore = compute_ws(writes)
+	cbs = compute_cbs(cpu, bandwidth)
+	ihs = compute_ihs(writeScore, readScore, cbs, delayedAcks)
 	return 800*ihs
 
 
@@ -38,11 +38,11 @@ def compute_cbs(cpuPct, bwPct):
 
 
 def compute_rs(readScores):
-	return np.dot(readScores, c)
+	return np.dot(readScores, write_weights)
 
 
 def compute_ws(writeScores):
-	return np.dot(writeScores, c)
+	return np.dot(writeScores, read_weights)
 
 
 # main function for the purpose of testing
@@ -50,6 +50,8 @@ def main():
 	row = get_test_health_inputs_row() #note: this function will have to be removed at some point
 	systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks = parse_health_inputs_row(row)
 	print("systemid: {}\ntimestamp: {}\nwrites: {}\nreads: {}\ncpu: {}\nbandwidth: {}\ndelayedAcks: {}".format(systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks))
+	score = compute_health_score(writes, reads, cpu, bandwidth, delayedAcks)
+	print("this system has a health score of {}".format(score))
 
 if __name__ == "__main__":
 	main()
