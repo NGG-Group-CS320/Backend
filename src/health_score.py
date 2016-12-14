@@ -28,6 +28,7 @@ def compute_health_score(writes, reads, cpu, bandwidth, delayedAcks):
 	print("Write score: {}".format(writeScore))
 	cbs = compute_cbs(cpu, bandwidth)
 	print("CPU-Bandwidth score: {}".format(cbs))
+	print("Delayed Acks score: {}".format(delayedAcks))
 	ihs = compute_ihs(writeScore, readScore, cbs, delayedAcks)
 	print("Interim Health score: {}".format(ihs))
 	return int(800*ihs)
