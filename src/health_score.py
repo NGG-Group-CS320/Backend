@@ -3,7 +3,7 @@
 # Script to compute health scores given storage system information
 #
 import numpy as np
-from query_db import get_test_health_inputs_row, parse_health_inputs_row
+from query_db import make_connection
 
 """
 Let c be a 21-dimensional vector defined as <2121, 2021, 1921, 1821, ... 321, 221, 121>.
@@ -22,15 +22,16 @@ read_weights = c
 
 
 def compute_health_score(writes, reads, cpu, bandwidth, delayedAcks):
+	cpu, bandwidth, delayedAcks = cpu/100, bandwidth/100, delayedAcks/100
 	readScore = compute_rs(reads)
-	print("Read score: {}".format(readScore))
+	print("Read score: {:.4}".format(readScore))
 	writeScore = compute_ws(writes)
-	print("Write score: {}".format(writeScore))
-	cbs = compute_cbs(cpu/100, bandwidth/100)
-	print("CPU-Bandwidth score: {}".format(cbs))
-	print("Delayed Acks: {}".format(delayedAcks))
+	print("Write score: {:.4}".format(writeScore))
+	cbs = compute_cbs(cpu, bandwidth)
+	print("CPU-Bandwidth score: {:.4}".format(cbs))
+	print("Delayed Acks: {:.4}".format(delayedAcks))
 	ihs = compute_ihs(writeScore, readScore, cbs, delayedAcks)
-	print("Interim Health score: {}".format(ihs))
+	print("Interim Health score: {:.4}".format(ihs))
 	return int(800*ihs)
 
 
@@ -50,6 +51,31 @@ def compute_rs(readScores):
 def compute_ws(writeScores):
 	writeScores = np.array(writeScores) / 100
 	return np.dot(writeScores, write_weights)
+
+
+# get a row of data to use to test the health score function
+def get_test_health_inputs_row():
+	with make_connection() as conn:
+		cur = conn.cursor()
+		# get health score inputs
+		cur.execute("""
+			SELECT systemid,"from",writes0_062msPct,writes0_125msPct,writes0_25msPct,writes0_5msPct,writes1msPct,writes2msPct,writes4msPct,writes8msPct,writes16msPct,writes32msPct,writes64msPct,writes128msPct,writes256msPct,writes512msPct,writes1024msPct,writes2048msPct,writes4096msPct,writes8192msPct,writes16384msPct,writes32768msPct,writes65536msPct,reads0_062msPct,reads0_125msPct,reads0_25msPct,reads0_5msPct,reads1msPct,reads2msPct,reads4msPct,reads8msPct,reads16msPct,reads32msPct,reads64msPct,reads128msPct,reads256msPct,reads512msPct,reads1024msPct,reads2048msPct,reads4096msPct,reads8192msPct,reads16384msPct,reads32768msPct,reads65536msPct,cpuLatestTotalAvgPct,portTotalBandwidthMBPS,delAcksPct
+			FROM hp
+			LIMIT 1
+			""")
+
+		rows = cur.fetchall()
+		row = rows[0]
+		return row
+
+
+# parses query results into variables to be used to compute health score
+def parse_health_inputs_row(row):
+	systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks = row[0], row[1], row[2:2+21], row[2+21:2+21+21], row[-3], row[-2], row[-1]
+	writes = [float(x) for x in writes]
+	reads = [float(x) for x in reads]
+	cpu, bandwidth, delayedAcks = float(cpu), float(bandwidth), float(delayedAcks)
+	return systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks
 
 
 # main function for the purpose of testing
