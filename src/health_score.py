@@ -22,34 +22,46 @@ read_weights = c
 
 
 def compute_health_score(writes, reads, cpu, bandwidth, delayedAcks):
+	# change the percentages to be in the range [0,1] instead of [0,100]
+	reads = np.array(reads) / 100
+	writes = np.array(writes) / 100
 	cpu, bandwidth, delayedAcks = cpu/100, bandwidth/100, delayedAcks/100
+
+	# calculate all scores
 	readScore = compute_rs(reads)
 	print("Read score: {:.4}".format(readScore))
+
 	writeScore = compute_ws(writes)
 	print("Write score: {:.4}".format(writeScore))
+
 	cbs = compute_cbs(cpu, bandwidth)
 	print("CPU-Bandwidth score: {:.4}".format(cbs))
+
 	print("Delayed Acks: {:.4}".format(delayedAcks))
+
 	ihs = compute_ihs(writeScore, readScore, cbs, delayedAcks)
 	print("Interim Health score: {:.4}".format(ihs))
+
 	return int(800*ihs)
 
 
+# calculate Interim Health score
 def compute_ihs(ws, res, cps, daPct):
 	return np.dot([ws,res, cps, 1-daPct], weights)
 
 
+# calculate CPU-Bandwidth score
 def compute_cbs(cpuPct, bwPct):
 	return np.sqrt(((1-cpuPct)**2+bwPct**2)/2)
 
 
+# calculate Read score
 def compute_rs(readScores):
-	readScores = np.array(readScores) / 100
 	return np.dot(readScores, read_weights)
 
 
+# calculate Write score
 def compute_ws(writeScores):
-	writeScores = np.array(writeScores) / 100
 	return np.dot(writeScores, write_weights)
 
 
