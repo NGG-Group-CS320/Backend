@@ -15,8 +15,7 @@ Compute the interim health score ihs=<ws, rs, cbs, 1-da><0.45, 0.25, 0.2, 0.1> o
 The resulting health score is floor(800*ihs) yielding a value on the range [0, 800].
 """
 weights = [0.45, 0.25, 0.2, 0.1]
-c = np.arange(21, 0, -1)
-c = c / np.linalg.norm(c)
+c = np.arange(21, 0, -1) / 21
 write_weights = c
 read_weights = c
 
