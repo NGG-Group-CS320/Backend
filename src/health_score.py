@@ -20,6 +20,28 @@ write_weights = c
 read_weights = c
 
 
+# return the color associated with each given score range
+def score_to_color(score):
+	color = "#000000"
+	if 0 <= score <= 99:
+		color = "#c0392b"
+	elif 100 <= score <= 199:
+		color = "#e74c3c"
+	elif 200 <= score <= 299:
+		color = "#d35400"
+	elif 300 <= score <= 399:
+		color = "#e67e22"
+	elif 400 <= score <= 499:
+		color = "#f39c12"
+	elif 500 <= score <= 599:
+		color = "#f1c40f"
+	elif 600 <= score <= 699:
+		color = "#2ecc71"
+	elif 700 <= score <= 799:
+		color = "#27ae60"
+	return color
+
+
 def compute_health_score(writes, reads, cpu, bandwidth, delayedAcks):
 	# change the percentages to be in the range [0,1] instead of [0,100]
 	reads = np.array(reads) / 100
