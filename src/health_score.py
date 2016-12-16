@@ -43,11 +43,6 @@ def score_to_color(score):
 
 
 def compute_health_score(writes, reads, cpu, bandwidth, delayedAcks):
-	# change the percentages to be in the range [0,1] instead of [0,100]
-	reads = np.array(reads) / 100
-	writes = np.array(writes) / 100
-	cpu, bandwidth, delayedAcks = cpu/100, bandwidth/100, delayedAcks/100
-
 	# calculate all scores
 	readScore = compute_rs(reads)
 	print("Read score: {:.4}".format(readScore))
@@ -104,10 +99,17 @@ def get_test_health_inputs_row():
 
 # parses query results into variables to be used to compute health score
 def parse_health_inputs_row(row):
+	# extract the fields from the row
 	systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks = row[0], row[1], row[2:2+21], row[2+21:2+21+21], row[-3], row[-2], row[-1]
 	writes = [float(x) for x in writes]
 	reads = [float(x) for x in reads]
 	cpu, bandwidth, delayedAcks = float(cpu), float(bandwidth), float(delayedAcks)
+
+	# change the percentages to be in the range [0,1] instead of [0,100]
+	reads = np.array(reads) / 100
+	writes = np.array(writes) / 100
+	cpu, bandwidth, delayedAcks = cpu/100, bandwidth/100, delayedAcks/100
+
 	return systemid, timestamp, writes, reads, cpu, bandwidth, delayedAcks
 
 
