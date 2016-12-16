@@ -6,7 +6,7 @@ import numpy as np
 from query_db import make_connection
 
 """
-Let c be a 21-dimensional vector defined as <2121, 2021, 1921, 1821, ... 321, 221, 121>.
+Let c be a 21-dimensional vector defined as <21/21, 20/21, 19/21, 18/21, ..., 3/21, 2/21, 1/21>.
 Create a 21-dimensional vector w from the fields of the form writes*msPct ordered from smallest to greatest time.
 Create a 21-dimensional vector r from the fields of the form reads*msPct ordered from smallest to greatest time.
 Let ws=wc and rs=rc. We call ws and rs the write score and read score respectively.
