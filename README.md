@@ -16,6 +16,9 @@ sudo apt-get install python3-psycopg2
 
 # Install numpy python package for data manipulation
 sudo apt-get install python3-numpy
+
+# Install the python package for the webserver
+pip3 install Flask
 ```
 
 ## Running
