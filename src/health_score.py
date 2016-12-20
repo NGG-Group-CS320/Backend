@@ -16,7 +16,7 @@ Compute the interim health score ihs=<ws, rs, cbs, 1-da><0.45, 0.25, 0.2, 0.1> o
 The resulting health score is floor(800*ihs) yielding a value on the range [0, 800].
 """
 weights = [0.45, 0.25, 0.2, 0.1]
-c = np.arange(21, 0, -1) / 21
+c = np.arange(21, 0, -1) / 20
 write_weights = c
 read_weights = c
 
@@ -115,6 +115,34 @@ def parse_health_inputs_row(row):
 	cpu, bandwidth, delayedAcks = cpu/100, bandwidth/100, delayedAcks/100
 
 	return systemid, from_time, to_time, writes, reads, cpu, bandwidth, delayedAcks
+
+
+
+# returns all the rows containing the ID's in IDlist
+# columns are from, to, health_score
+def get_health_scores(IDlist):
+	with make_connection() as conn:
+		cur = conn.cursor()
+		import time
+		def to_unix_time(from_time):
+			return str(int(time.mktime(from_time.timetuple())))
+
+		def get_system_rows(systemID):
+			cur.execute("""
+				SELECT "from",health_score
+				FROM health_scores
+				WHERE systemid={};
+				""".format(systemID))
+			systems_info = cur.fetchall()
+			systems_info = [{"time":to_unix_time(x[0]),"score":str(x[1])} for x in systems_info]
+			return systems_info
+
+
+		systems_info = [{"id":systemID,"name":"System {}".format(systemID),"data":get_system_rows(systemID)} for systemID in IDlist]
+		
+		cur.close()
+		return systems_info
+
 
 
 # main function for the purpose of testing
