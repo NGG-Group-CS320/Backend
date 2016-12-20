@@ -114,6 +114,34 @@ def parse_health_inputs_row(row):
 	return systemid, from_time, to_time, writes, reads, cpu, bandwidth, delayedAcks
 
 
+
+# returns all the rows containing the ID's in IDlist
+# columns are from, to, health_score
+def get_health_scores(IDlist):
+	with make_connection() as conn:
+		cur = conn.cursor()
+		import time
+		def to_unix_time(from_time):
+			return str(int(time.mktime(from_time.timetuple())))
+
+		def get_system_rows(systemID):
+			cur.execute("""
+				SELECT "from",health_score
+				FROM health_scores
+				WHERE systemid={};
+				""".format(systemID))
+			systems_info = cur.fetchall()
+			systems_info = [{"time":to_unix_time(x[0]),"score":str(x[1])} for x in systems_info]
+			return systems_info
+
+
+		systems_info = [{"id":systemID,"name":"System {}".format(systemID),"data":get_system_rows(systemID)} for systemID in IDlist]
+		
+		cur.close()
+		return systems_info
+
+
+
 # main function for the purpose of testing
 def main():
 	row = get_test_health_inputs_row() #note: this function will have to be removed at some point
