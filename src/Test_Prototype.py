@@ -1,4 +1,4 @@
-# Need to test if health score functios properly.
+# Need to test if health score functions properly.
 # (See health_score.py)
 
 # Elements needed for health score are:
