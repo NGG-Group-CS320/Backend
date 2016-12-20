@@ -82,23 +82,6 @@ def compute_ws(writeScores):
 	return np.dot(writeScores, write_weights)
 
 
-# get a row of data to use to test the health score function
-def get_test_health_inputs_row():
-	with make_connection() as conn:
-		cur = conn.cursor()
-		# get health score inputs
-		cur.execute("""
-			SELECT writes0_062msPct,writes0_125msPct,writes0_25msPct,writes0_5msPct,writes1msPct,writes2msPct,writes4msPct,writes8msPct,writes16msPct,writes32msPct,writes64msPct,writes128msPct,writes256msPct,writes512msPct,writes1024msPct,writes2048msPct,writes4096msPct,writes8192msPct,writes16384msPct,writes32768msPct,writes65536msPct,reads0_062msPct,reads0_125msPct,reads0_25msPct,reads0_5msPct,reads1msPct,reads2msPct,reads4msPct,reads8msPct,reads16msPct,reads32msPct,reads64msPct,reads128msPct,reads256msPct,reads512msPct,reads1024msPct,reads2048msPct,reads4096msPct,reads8192msPct,reads16384msPct,reads32768msPct,reads65536msPct,systemid,"from","to",cpuLatestTotalAvgPct,normalizedBandwidth,delAcksPct
-			FROM hpnmb
-			LIMIT 1
-			""")
-
-		rows = cur.fetchall()
-		cur.close()
-		row = rows[0]
-		return row
-
-
 # parses query results into variables to be used to compute health score
 def parse_health_inputs_row(row):
 	# extract the fields from the row
@@ -152,20 +135,7 @@ def get_health_scores(IDlist):
 
 # main function for the purpose of testing
 def main():
-	row = get_test_health_inputs_row() #note: this function will have to be removed at some point
-	systemid, from_time, to_time, writes, reads, cpu, bandwidth, delayedAcks = parse_health_inputs_row(row)
-	
-	import time
-	print(type(from_time))
-	print(from_time)
-	unixtime = time.mktime(from_time.timetuple())
-	print(unixtime)
-
-	# print("systemid: {}\nfrom_time: {}\nto_time: {}\nwrites: {}\nreads: {}\ncpu: {}\nbandwidth: {}\ndelayedAcks".format(systemid, from_time, to_time, writes, reads, cpu, bandwidth, delayedAcks))
-	# print("systemid: {}\nfrom_time: {}\nto_time: {}\nwrites: {}\nreads: {}\ncpu: {}\nbandwidth: {}\ndelayedAcks".format(systemid, from_time, to_time, np.sum(writes), np.sum(reads), cpu, bandwidth, delayedAcks))
-
-	# score = compute_health_score(writes, reads, cpu, bandwidth, delayedAcks)
-	# print("This system has a health score of {}/800 (higher is healthier)".format(score))
+	print("insert test functions here")
 
 if __name__ == "__main__":
 	main()
