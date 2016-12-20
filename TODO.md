@@ -17,11 +17,11 @@
 - [X] Make a python script which queries the database
 
 ## Precomputing and health scores
-- [ ] Make function which returns the health score for a system
-- [ ] Create precomputed_stats table in postgres
+- [X] Make function which returns the health score for a system
+- [X] Create precomputed_stats table in postgres
  - PROBABLY average & std dev for certain chosen columns
  - This should also contain the health scores
 
 ## Webserver
-- [ ] Create webserver (PROBABLY we said Apache for this)
-- [ ] Make the webserver server database info to the user
+- [X] Create webserver (PROBABLY we said Apache for this)
+- [X] Make the webserver server database info to the user
