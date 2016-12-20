@@ -13,14 +13,14 @@ with make_connection() as conn:
 	print("fetching list of unique systemid's")
 	cur.execute("""
 		SELECT systemid
-		FROM hp
+		FROM hpnmb
 		GROUP BY systemid;
 		""")
 	all_systemids = cur.fetchall() #length is currently 4519
 	all_systemids = [x[0] for x in all_systemids]
 	print(np.array(all_systemids))
 
-	print(100.0*all_systemids.index(3394)/len(all_systemids),"% done")
+	print(100.0*all_systemids.index(2262)/len(all_systemids),"% done")
 
 	cur.close()
 
