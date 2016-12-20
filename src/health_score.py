@@ -121,12 +121,16 @@ def parse_health_inputs_row(row):
 # returns all the rows containing the ID's in IDlist
 # columns are from, to, health_score
 def get_health_scores(IDlist):
+	#set up a connection
 	with make_connection() as conn:
 		cur = conn.cursor()
 		import time
+
+		#create a to unix time function
 		def to_unix_time(from_time):
 			return str(int(time.mktime(from_time.timetuple())))
 
+		#function for getting from_time and health_score given a system ID
 		def get_system_rows(systemID):
 			cur.execute("""
 				SELECT "from",health_score
@@ -134,10 +138,11 @@ def get_health_scores(IDlist):
 				WHERE systemid={};
 				""".format(systemID))
 			systems_info = cur.fetchall()
+			#format into dictionary
 			systems_info = [{"time":to_unix_time(x[0]),"score":str(x[1])} for x in systems_info]
 			return systems_info
 
-
+		#format into better dictionary
 		systems_info = [{"id":systemID,"name":"System {}".format(systemID),"data":get_system_rows(systemID)} for systemID in IDlist]
 		
 		cur.close()
