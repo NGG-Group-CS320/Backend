@@ -1,6 +1,9 @@
 # Directory holding CSV files
 Users/
 
+#Mac stuff
+*.DS_store
+
 # The configuration file
 src/config.py
 
