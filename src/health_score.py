@@ -103,13 +103,13 @@ def parse_health_inputs_row(row):
 
 # returns all the rows containing the ID's in IDlist
 # columns are from, to, health_score
-def get_health_scores(IDlist):
+def get_line_graph_json(IDlist):
 	#set up a connection
 	with make_connection() as conn:
 		cur = conn.cursor()
-		import time
 
-		#create a to unix time function
+		#convert the verbose timestamp to unix time
+		import time
 		def to_unix_time(from_time):
 			return str(int(time.mktime(from_time.timetuple())))
 
@@ -131,6 +131,65 @@ def get_health_scores(IDlist):
 		cur.close()
 		return systems_info
 
+
+# returns all the rows containing the ID's in IDlist
+# columns are from, to, health_score
+def get_wheel_graph_json(IDlist):
+	#set up a connection
+	with make_connection() as conn:
+		cur = conn.cursor()
+
+		cur.execute("""
+			SELECT hs.*
+			FROM
+				(SELECT systemid, max("from") AS maxDate
+				FROM health_scores
+				GROUP BY systemid) m, health_scores hs
+			WHERE m.systemid=hs.systemid AND m.maxDate=hs."from" AND ({})
+			ORDER BY health_score ASC;
+			""".format(" OR ".join(["hs.systemid={}".format(x) for x in IDlist])))
+
+		systems_info = cur.fetchall()
+
+		#format into dictionary
+		def make_row_tuple(row):
+			systemid, from_time, to_time, health_score, write_score, read_score, cpu_bandwidth_score, del_ack_score = row
+
+			return {
+						"id": systemid,
+						"name": "System {}".format(systemid),
+						"color": "#{}".format(score_to_color(health_score)),
+						"score": str(health_score),
+						"writeScore": write_score,
+						"readScore": read_score,
+						"cbScore": cpu_bandwidth_score,
+						"delAckPct": del_ack_score
+					}
+
+		systems_info = [make_row_tuple(row) for row in systems_info]
+
+		bin1 = [system for system in systems_info if   0 <= int(system["score"]) <= 199]
+		bin2 = [system for system in systems_info if 200 <= int(system["score"]) <= 399]
+		bin3 = [system for system in systems_info if 400 <= int(system["score"]) <= 599]
+		bin4 = [system for system in systems_info if 600 <= int(system["score"]) <= 800]
+
+		results = [
+			{"name":"0-400","children":
+				[
+					{"name":"0-200","children":bin1},
+					{"name":"200-400","children":bin2}
+				]
+			},
+			{"name":"400-800","children":
+				[
+					{"name":"400-600","children":bin3},
+					{"name":"600-800","children":bin4}
+				]
+			}
+		]
+
+		cur.close()
+		return results
 
 
 # main function for the purpose of testing
